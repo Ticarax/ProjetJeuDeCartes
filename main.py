@@ -1,1 +1,0 @@
-class Carte:kmwdjltb se;:sehh;kt_<zvbiltèezg('tgbilqqtb-ilqtb-il g,;wjkuèig')
