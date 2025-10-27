@@ -2,6 +2,8 @@ from classes.class_joueur import Joueur
 from classes.class_partie import Partie
 from classes.class_carte_monstre import CarteMonstre
 from classes.class_carte_magie import CarteMagie
+from classes.bibliotheque_cartes import BIBLIOTHEQUE_COMPLETE
+import random
 
 def afficher_etat_jeu(partie):
     joueur = partie.joueur_actuel
@@ -16,7 +18,7 @@ def afficher_etat_jeu(partie):
         if isinstance(carte, CarteMonstre):
             print(f"  {i+1}: {carte.nom} (Monstre - ATK: {carte.points_attaque} / DEF: {carte.points_defense})")
         elif isinstance(carte, CarteMagie):
-            print(f"  {i+1}: {carte.nom} (Magie)")
+            print(f"  {i+1}: {carte.nom} (Magie - Effet: {carte.type_effet}, Valeur: {carte.valeur})")
     
     print("\n--- Plateau de {joueur.nom} ---")
     print("  Monstres:", [c.nom if c else 'Vide' for c in (partie.plateau.zones_monstre_j1 if joueur == partie.joueur1 else partie.plateau.zones_monstre_j2)])
@@ -32,16 +34,14 @@ def afficher_etat_jeu(partie):
 joueur1 = Joueur("Remi")
 joueur2 = Joueur("Tim")
 
-# Création des cartes
-monstre1 = CarteMonstre("Magicien Sombre", "Le magicien ultime en termes d'attaque et de défense.", 2500, 2100, 7)
-monstre2 = CarteMonstre("Dragon Blanc aux Yeux Bleus", "Un dragon légendaire qui pulvérise ses ennemis.", 3000, 2500, 8)
-magie1 = CarteMagie("Trou Noir", "Détruit tous les monstres sur le terrain.", "Effet de champ")
+# Préparation du paquet de cartes
+paquet_complet = list(BIBLIOTHEQUE_COMPLETE)
+random.shuffle(paquet_complet)
 
-
-
-# Remplissage des decks
-joueur1.deck = [monstre1, magie1] * 3
-joueur2.deck = [monstre2] * 5
+# Distribution des decks
+moitie = len(paquet_complet) // 2
+joueur1.deck = paquet_complet[:moitie]
+joueur2.deck = paquet_complet[moitie:]
 
 # Création de la partie
 partie = Partie(joueur1, joueur2)
@@ -62,7 +62,7 @@ while True:
         print(f"Victoire ! {gagnant.nom} a gagné la partie !")
         break
 
-    action = input("Que voulez-vous faire ? (invoquer / poser / attaquer / fin) > ").lower()
+    action = input("Que voulez-vous faire ? (invoquer / poser / attaquer / activer / fin) > ").lower()
 
     if action == "invoquer":
         if partie.phases[partie.phase_actuelle_index] == "Principale":
@@ -98,13 +98,43 @@ while True:
                     partie.plateau.placer_carte(joueur_id, carte_a_poser, "magie_piege", choix_pos)
                     joueur_actuel.main.pop(choix_carte)
                     
-                    print(f"{joueur_actuel.nom} a posé {carte_a_poser.nom}!")
+                    print(f"{joueur_actuel.nom} a posé {carte_a_poser.nom} face cachée.")
                 else:
                     print("Choix invalide. Assurez-vous de choisir une carte Magie.")
             except (ValueError, IndexError):
                 print("Entrée invalide. Veuillez réessayer.")
         else:
             print("Vous ne pouvez poser une carte que pendant votre phase Principale.")
+
+    elif action == "activer":
+        if partie.phases[partie.phase_actuelle_index] == "Principale":
+            try:
+                choix_carte = int(input("Quelle carte de votre main voulez-vous activer ? (numéro) > ")) - 1
+
+                if 0 <= choix_carte < len(joueur_actuel.main) and isinstance(joueur_actuel.main[choix_carte], CarteMagie):
+                    carte_a_activer = joueur_actuel.main[choix_carte]
+                    effet = carte_a_activer.jouer(joueur_actuel)
+                    print(f"{joueur_actuel.nom} active l'effet de {effet['nom']}!")
+
+                    if effet['type'] == 'degats':
+                        adversaire.points_de_vie -= effet['valeur']
+                        print(f"{adversaire.nom} perd {effet['valeur']} points de vie.")
+                    elif effet['type'] == 'soin':
+                        joueur_actuel.points_de_vie += effet['valeur']
+                        print(f"{joueur_actuel.nom} gagne {effet['valeur']} points de vie.")
+                    elif effet['type'] == 'pioche':
+                        for _ in range(effet['valeur']):
+                            joueur_actuel.piocher()
+                        print(f"{joueur_actuel.nom} pioche {effet['valeur']} cartes.")
+
+                    joueur_actuel.main.pop(choix_carte)
+                    joueur_actuel.cimetiere.append(carte_a_activer)
+                else:
+                    print("Choix invalide. Assurez-vous de choisir une carte Magie.")
+            except (ValueError, IndexError):
+                print("Entrée invalide. Veuillez réessayer.")
+        else:
+            print("Vous ne pouvez activer une carte que pendant votre phase Principale.")
 
     elif action == "attaquer":
         if partie.phases[partie.phase_actuelle_index] == "Combat":
