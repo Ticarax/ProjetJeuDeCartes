@@ -6,9 +6,9 @@ class CarteMagie(Carte):
         self.type_effet = type_effet
 
     def activer_effet(self, partie, cible):
-        print(f"L'effet de la carte {self.nom} a été activé.")
+        return f"L'effet de la carte {self.nom} a été activé."
 
     def jouer(self, proprietaire):
         # For now, playing a magic card activates its effect immediately
-        self.activer_effet(None, None)
+        return self.activer_effet(None, None)
 
