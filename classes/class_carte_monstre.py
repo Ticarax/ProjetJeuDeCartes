@@ -9,7 +9,25 @@ class CarteMonstre(Carte):
         self.position = "Attaque"
 
     def attaquer(self, monstre_cible):
-        pass
+        if monstre_cible.position == "Attaque":
+            if self.points_attaque > monstre_cible.points_attaque:
+                return "Attaquant gagne"
+            elif self.points_attaque < monstre_cible.points_attaque:
+                return "Défenseur gagne"
+            else:
+                return "Égalité"
+        elif monstre_cible.position == "Défense":
+            if self.points_attaque > monstre_cible.points_defense:
+                return "Attaquant gagne"
+            else:
+                return "Défenseur gagne"
 
     def changer_position(self):
+        if self.position == "Attaque":
+            self.position = "Défense"
+        else:
+            self.position = "Attaque"
+
+    def jouer(self, proprietaire):
+        # For now, playing a monster card does nothing special
         pass

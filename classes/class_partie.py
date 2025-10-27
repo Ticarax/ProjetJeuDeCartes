@@ -10,13 +10,25 @@ class Partie:
         self.phase_actuelle = "Pioche"
 
     def demarrer_partie(self):
-        pass
+        for _ in range(5):
+            self.joueur1.piocher()
+            self.joueur2.piocher()
 
     def prochaine_phase(self):
-        pass
+        self.phase_actuelle_index = (self.phase_actuelle_index + 1) % len(self.phases)
+        if self.phases[self.phase_actuelle_index] == "Pioche":
+            self.changer_tour()
 
     def changer_tour(self):
-        pass
+        if self.joueur_actuel == self.joueur1:
+            self.joueur_actuel = self.joueur2
+        else:
+            self.joueur_actuel = self.joueur1
+        self.joueur_actuel.piocher()
 
     def verifier_victoire(self):
-        pass
+        if self.joueur1.points_de_vie <= 0:
+            return self.joueur2
+        elif self.joueur2.points_de_vie <= 0:
+            return self.joueur1
+        return None
