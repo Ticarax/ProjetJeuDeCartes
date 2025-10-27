@@ -37,6 +37,8 @@ monstre1 = CarteMonstre("Magicien Sombre", "Le magicien ultime en termes d'attaq
 monstre2 = CarteMonstre("Dragon Blanc aux Yeux Bleus", "Un dragon légendaire qui pulvérise ses ennemis.", 3000, 2500, 8)
 magie1 = CarteMagie("Trou Noir", "Détruit tous les monstres sur le terrain.", "Effet de champ")
 
+
+
 # Remplissage des decks
 joueur1.deck = [monstre1, magie1] * 3
 joueur2.deck = [monstre2] * 5
