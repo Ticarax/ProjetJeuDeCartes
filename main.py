@@ -29,8 +29,8 @@ def afficher_etat_jeu(partie):
 
 # --- Initialisation du jeu ---
 # Création des joueurs
-joueur1 = Joueur("Yugi")
-joueur2 = Joueur("Kaiba")
+joueur1 = Joueur("Remi")
+joueur2 = Joueur("Tim")
 
 # Création des cartes
 monstre1 = CarteMonstre("Magicien Sombre", "Le magicien ultime en termes d'attaque et de défense.", 2500, 2100, 7)
