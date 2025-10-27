@@ -9,18 +9,30 @@ class CarteMonstre(Carte):
         self.position = "Attaque"
 
     def attaquer(self, monstre_cible):
+        resultat = {
+            "attaquant_detruit": False,
+            "defenseur_detruit": False,
+            "dommages": 0
+        }
+
         if monstre_cible.position == "Attaque":
             if self.points_attaque > monstre_cible.points_attaque:
-                return "Attaquant gagne"
+                resultat["defenseur_detruit"] = True
+                resultat["dommages"] = self.points_attaque - monstre_cible.points_attaque
             elif self.points_attaque < monstre_cible.points_attaque:
-                return "Défenseur gagne"
-            else:
-                return "Égalité"
+                resultat["attaquant_detruit"] = True
+                resultat["dommages"] = monstre_cible.points_attaque - self.points_attaque
+            else: # Égalité
+                resultat["attaquant_detruit"] = True
+                resultat["defenseur_detruit"] = True
+        
         elif monstre_cible.position == "Défense":
             if self.points_attaque > monstre_cible.points_defense:
-                return "Attaquant gagne"
-            else:
-                return "Défenseur gagne"
+                resultat["defenseur_detruit"] = True
+            elif self.points_attaque < monstre_cible.points_defense:
+                resultat["dommages"] = monstre_cible.points_defense - self.points_attaque
+        
+        return resultat
 
     def changer_position(self):
         if self.position == "Attaque":
