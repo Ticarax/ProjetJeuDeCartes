@@ -116,7 +116,7 @@ BIBLIOTHEQUE_COMPLETE = [
     friendship,
     fiole,
     fiole2,
-    Sepuku,
+    #Sepuku,
     fiole_special,
     fiole_special2,
 
