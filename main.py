@@ -35,13 +35,34 @@ joueur1 = Joueur("Remi")
 joueur2 = Joueur("Tim")
 
 # Préparation du paquet de cartes
-paquet_complet = list(BIBLIOTHEQUE_COMPLETE)
-random.shuffle(paquet_complet)
+# Filtrer les monstres et les magies
+monstres = [carte for carte in BIBLIOTHEQUE_COMPLETE if isinstance(carte, CarteMonstre)]
+magies = [carte for carte in BIBLIOTHEQUE_COMPLETE if isinstance(carte, CarteMagie)]
 
-# Distribution des decks
-moitie = len(paquet_complet) // 2
-joueur1.deck = paquet_complet[:moitie]
-joueur2.deck = paquet_complet[moitie:]
+# Mélanger les listes
+random.shuffle(monstres)
+random.shuffle(magies)
+
+# Sélectionner 20 monstres et 10 magies (si possible)
+deck_monstres = monstres[:20]
+deck_magies = magies[:10]
+
+# Créer le paquet de jeu final
+paquet_de_jeu = deck_monstres + deck_magies
+random.shuffle(paquet_de_jeu)
+
+# S'assurer qu'on a assez de cartes, sinon le jeu ne peut pas commencer
+if len(paquet_de_jeu) < 30:
+    print(f"Attention: Le paquet ne contient que {len(paquet_de_jeu)} cartes. Le jeu risque de ne pas fonctionner comme prévu.")
+    # On pourrait vouloir arrêter le jeu ici ou gérer le cas
+    # Pour l'instant, on distribue ce qu'on a
+    moitie = len(paquet_de_jeu) // 2
+    joueur1.deck = paquet_de_jeu[:moitie]
+    joueur2.deck = paquet_de_jeu[moitie:]
+else:
+    # Distribution des decks (15 cartes par joueur)
+    joueur1.deck = paquet_de_jeu[:15]
+    joueur2.deck = paquet_de_jeu[15:30]
 
 # Création de la partie
 partie = Partie(joueur1, joueur2)
@@ -126,6 +147,16 @@ while True:
                         for _ in range(effet['valeur']):
                             joueur_actuel.piocher()
                         print(f"{joueur_actuel.nom} pioche {effet['valeur']} cartes.")
+                    elif effet['type'] == 'vole':
+                        print(f"{joueur_actuel.nom} tente de voler {effet['valeur']} carte(s) du deck de {adversaire.nom}.")
+                        for i in range(effet['valeur']):
+                            if adversaire.deck:
+                                carte_volee = adversaire.deck.pop(0)
+                                joueur_actuel.main.append(carte_volee)
+                                print(f"  -> Carte volée : {carte_volee.nom}")
+                            else:
+                                print("Le deck de l'adversaire est vide.")
+                                break
 
                     joueur_actuel.main.pop(choix_carte)
                     joueur_actuel.cimetiere.append(carte_a_activer)

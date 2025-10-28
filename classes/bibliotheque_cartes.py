@@ -55,12 +55,12 @@ divine_light2 = CarteMagie("Lumiere divine", "Soigne le joueur actif.", "soin", 
 Dark_blast = CarteMagie("Rayon noir", "Inflige des dégâts à la carte adverse.", "degats", 1000)
 Smite = CarteMagie("Smite", "Finie la carte adverse si il lui reste peu de pv.", "finish", 400)
 Smite2 = CarteMagie("Smite", "Finie la carte adverse si il lui reste peu de pv.", "finish", 400)
-friendship = CarteMagie("friendship power", "augmente l'attaque d'une carte'.", "buff", 400)
+friendship = CarteMagie("friendship power", "augmente l'attaque d'une carte.", "buff", 400)
 fiole = CarteMagie("fiole sacré", "soigne une carte.", "régénération", 500)
 fiole2 = CarteMagie("fiole sacré", "soigne une carte.", "régénération", 500)
 #Sepukku = CarteMagie("sepuku", "augmente l'attaque d'une carte'.""baisse la vie de la carte.", "buff", 400)
-fiole_special = CarteMagie("fiole miraculeuse", "par une attaque.", "renforcement", 1)
-fiole_special2 = CarteMagie("fiole miraculeuse", "par une attaque.", "renforcement", 1)
+fiole_special = CarteMagie("fiole miraculeuse", "part une attaque.", "renforcement", 1)
+fiole_special2 = CarteMagie("fiole miraculeuse", "part une attaque.", "renforcement", 1)
 
 # 3. Regroupez toutes les cartes dans une liste principale
 BIBLIOTHEQUE_COMPLETE = [
