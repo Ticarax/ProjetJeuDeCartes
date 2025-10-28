@@ -187,8 +187,8 @@ while True:
                     resultat = joueur_actuel.declarer_attaque(attaquant, defenseur, adversaire)
                     print(f"Combat ! {attaquant.nom} attaque {defenseur.nom}.")
 
-                    if resultat["dommages"] > 0:
-                        print(f"Des dommages sont infligés ! Montant : {resultat["dommages"]}")
+                    if resultat['dommages'] > 0:
+                        print(f"Des dommages sont infligés ! Montant : {resultat['dommages']}")
                     if resultat["attaquant_detruit"]:
                         print(f"{attaquant.nom} est détruit.")
                         zones_joueur[choix_att] = None

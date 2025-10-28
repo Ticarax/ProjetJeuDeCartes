@@ -1,0 +1,13 @@
+# Fichiers de bytecode Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dossiers d'environnement virtuel
+venv/
+env/
+
+# Fichiers de configuration d'IDE
+.vscode/
+.idea/
