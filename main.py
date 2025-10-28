@@ -134,32 +134,35 @@ while True:
 
                 if 0 <= choix_carte < len(joueur_actuel.main) and isinstance(joueur_actuel.main[choix_carte], CarteMagie):
                     carte_a_activer = joueur_actuel.main[choix_carte]
-                    effet = carte_a_activer.jouer(joueur_actuel)
-                    print(f"{joueur_actuel.nom} active l'effet de {effet['nom']}!")
+                    carte_cible = None
 
-                    if effet['type'] == 'degats':
-                        adversaire.points_de_vie -= effet['valeur']
-                        print(f"{adversaire.nom} perd {effet['valeur']} points de vie.")
-                    elif effet['type'] == 'soin':
-                        joueur_actuel.points_de_vie += effet['valeur']
-                        print(f"{joueur_actuel.nom} gagne {effet['valeur']} points de vie.")
-                    elif effet['type'] == 'pioche':
-                        for _ in range(effet['valeur']):
-                            joueur_actuel.piocher()
-                        print(f"{joueur_actuel.nom} pioche {effet['valeur']} cartes.")
-                    elif effet['type'] == 'vole':
-                        print(f"{joueur_actuel.nom} tente de voler {effet['valeur']} carte(s) du deck de {adversaire.nom}.")
-                        for i in range(effet['valeur']):
-                            if adversaire.deck:
-                                carte_volee = adversaire.deck.pop(0)
-                                joueur_actuel.main.append(carte_volee)
-                                print(f"  -> Carte volée : {carte_volee.nom}")
+                    # Gérer le ciblage
+                    effets_ciblage = ["degats", "finish", "renforcement", "régénération", "buff"]
+                    if carte_a_activer.type_effet in effets_ciblage:
+                        if carte_a_activer.type_effet in ["degats", "finish"]:
+                            print("Quel monstre adverse voulez-vous cibler ?")
+                            zones_cibles = partie.plateau.zones_monstre_j2 if joueur_actuel == joueur1 else partie.plateau.zones_monstre_j1
+                        else: # renforcement, régénération, buff
+                            print("Quel de vos monstres voulez-vous cibler ?")
+                            zones_cibles = partie.plateau.zones_monstre_j1 if joueur_actuel == joueur1 else partie.plateau.zones_monstre_j2
+                        
+                        for i, monstre in enumerate(zones_cibles):
+                            if monstre:
+                                print(f"  {i}: {monstre.nom}")
+                        
+                        try:
+                            choix_cible = int(input("Numéro du monstre > "))
+                            if 0 <= choix_cible < len(zones_cibles) and zones_cibles[choix_cible]:
+                                carte_cible = zones_cibles[choix_cible]
                             else:
-                                print("Le deck de l'adversaire est vide.")
-                                break
+                                print("Cible invalide.")
+                                continue # Recommence la boucle d'action
+                        except ValueError:
+                            print("Entrée invalide.")
+                            continue
 
-                    joueur_actuel.main.pop(choix_carte)
-                    joueur_actuel.cimetiere.append(carte_a_activer)
+                    partie.jouer_carte_magie(carte_a_activer, joueur_actuel, adversaire, carte_cible)
+
                 else:
                     print("Choix invalide. Assurez-vous de choisir une carte Magie.")
             except (ValueError, IndexError):

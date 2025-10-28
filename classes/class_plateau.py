@@ -18,8 +18,15 @@ class Plateau:
                 self.zones_magie_piege_j2[position] = carte
 
     def retirer_carte(self, carte):
-        # This is a simplified version
-        pass
+        for i, c in enumerate(self.zones_monstre_j1):
+            if c == carte:
+                self.zones_monstre_j1[i] = None
+                return
+        for i, c in enumerate(self.zones_monstre_j2):
+            if c == carte:
+                self.zones_monstre_j2[i] = None
+                return
+
 
     def get_monstres_visibles(self, joueur):
         if joueur == 1:
