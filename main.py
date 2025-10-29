@@ -150,6 +150,16 @@ while True:
     if action is None:
         continue # Action invalide, on redemande
 
+    if action == "auto":
+        print("Aucune action possible, passage à la phase suivante.")
+        # Si on est en phase de combat, on finit le tour
+        if partie.phases[partie.phase_actuelle_index] == "Combat":
+            partie.changer_tour()
+        # Sinon on passe à la phase de combat
+        else:
+            partie.prochaine_phase()
+        continue
+
     # --- Gérer les changements de phase ---
     if action == "phase_combat":
         partie.prochaine_phase()
