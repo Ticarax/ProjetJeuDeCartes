@@ -8,15 +8,17 @@ import random
 def demander_action(partie):
     phase_actuelle = partie.phases[partie.phase_actuelle_index]
     print(f"--- Phase {phase_actuelle} ---")
-    
+    #f = sa facilite l'affichage quand il y a bcp de texte
     actions_possibles = {}
     joueur_actuel = partie.joueur_actuel
     
     if phase_actuelle == "Principale":
-        # On vérifie si le joueur peut invoquer (a un monstre en main et de la place)
+        # On vérifie si le joueur peut invoquer un monstre en main et de la place sur son plateau
         peut_invoquer = any(isinstance(c, CarteMonstre) for c in joueur_actuel.main) and any(z is None for z in (partie.plateau.zones_monstre_j1 if partie.joueur_actuel == partie.joueur1 else partie.plateau.zones_monstre_j2))
-        # On vérifie si le joueur peut activer une magie (a une magie en main)
+        # fait par IA car complique a trouver
         peut_activer = any(isinstance(c, CarteMagie) for c in joueur_actuel.main)
+        #any = regarde tout les element et renvoie trus si un seul est true, false si  tout est faux / va simplifer et eviter de rajouter plei nde and/or ect...
+        #isinstance = permet de vérifier le type d'objet d'une variable     
 
         menu = {}
         if peut_invoquer:
@@ -27,6 +29,7 @@ def demander_action(partie):
         menu[str(len(menu)+1)] = ("Passer à la phase de combat", "phase_combat")
         menu[str(len(menu)+1)] = ("Finir le tour", "fin_tour")
         actions_possibles = menu
+        #affiche dans une biblio appeler menu le menu / les 2 action avec if sont pour les afficher uniquement si c'est possible de le faire 
 
     elif phase_actuelle == "Combat":
         # On vérifie si le joueur a un monstre qui peut encore attaquer
@@ -55,6 +58,7 @@ def demander_action(partie):
     else:
         print("Action non valide.")
         return None
+    #sa permet de veifier si le nombre que l'on rentre correspond a une action disponible
 
 def afficher_etat_jeu(partie):
     joueur = partie.joueur_actuel
@@ -65,46 +69,48 @@ def afficher_etat_jeu(partie):
     print("="*30)
     
     print("\n--- Votre Main ---")
-    for i, carte in enumerate(joueur.main):
+    for i, carte in enumerate(joueur.main):#enumerate = pour le nombre de carte que le joueur a dans sa main
         if isinstance(carte, CarteMonstre):
             print(f"  {i+1}: {carte.nom} (Monstre - ATK: {carte.points_attaque} / DEF: {carte.points_defense})")
         elif isinstance(carte, CarteMagie):
             print(f"  {i+1}: {carte.nom} (Magie - Effet: {carte.type_effet}, Valeur: {carte.valeur})")
+
+    #afficher le deck en main du joueur 
     
     print(f"\n--- Plateau de {joueur.nom} ---")
     print("  Monstres:", [c.nom if c else 'Vide' for c in (partie.plateau.zones_monstre_j1 if joueur == partie.joueur1 else partie.plateau.zones_monstre_j2)])
-
+    #aider par ia pour afficher les nom des carte positioner sur le plateau en fonction du joueur qui joue 
     print(f"\n--- Plateau de {adversaire.nom} ---")
     print("  Monstres:", [c.nom if c else 'Vide' for c in (partie.plateau.zones_monstre_j2 if joueur == partie.joueur1 else partie.plateau.zones_monstre_j1)])
     print("="*30 + "\n")
 
 # --- Initialisation du jeu ---
-# Création des joueurs
+# création des joueurs
 joueur1 = Joueur("Remi")
 joueur2 = Joueur("Tim")
 
-# Préparation du paquet de cartes
-# Filtrer les monstres et les magies
+# preparation du paquet de cartes
+# filtrer les monstres et les magies
 monstres = [carte for carte in BIBLIOTHEQUE_COMPLETE if isinstance(carte, CarteMonstre)]
 magies = [carte for carte in BIBLIOTHEQUE_COMPLETE if isinstance(carte, CarteMagie)]
 
-# Mélanger les listes
+# melanger les listes
 random.shuffle(monstres)
 random.shuffle(magies)
 
-# Sélectionner 20 monstres et 10 magies (si possible)
+# selectionner 20 monstres et 10 magies 
 deck_monstres = monstres[:20]
 deck_magies = magies[:10]
 
-# Créer le paquet de jeu final
+# créer le paquet de jeu final
 paquet_de_jeu = deck_monstres + deck_magies
 random.shuffle(paquet_de_jeu)
 
-# S'assurer qu'on a assez de cartes, sinon le jeu ne peut pas commencer
+# s'assurer qu'on a assez de cartes, sinon le jeu ne peut pas commencer / on la mit au debut pour eviter les beug et les testes mais on a decider de le laisser 
 if len(paquet_de_jeu) < 30:
     print(f"Attention: Le paquet ne contient que {len(paquet_de_jeu)} cartes. Le jeu risque de ne pas fonctionner comme prévu.")
-    # On pourrait vouloir arrêter le jeu ici ou gérer le cas
-    # Pour l'instant, on distribue ce qu'on a
+    # on pourrait vouloir arrêter le jeu ici ou gérer le cas
+    # pour l'instant, on distribue ce qu'on a
     moitie = len(paquet_de_jeu) // 2
     joueur1.deck = paquet_de_jeu[:moitie]
     joueur2.deck = paquet_de_jeu[moitie:]
@@ -113,10 +119,10 @@ else:
     joueur1.deck = paquet_de_jeu[:15]
     joueur2.deck = paquet_de_jeu[15:30]
 
-# Création de la partie
+# creation de la partie
 partie = Partie(joueur1, joueur2)
 
-# Démarrage de la partie (pioche initiale)
+# demarrage de la partie (pioche initiale)
 print("La partie commence !")
 partie.demarrer_partie()
 
@@ -125,7 +131,7 @@ while True:
     joueur_actuel = partie.joueur_actuel
     adversaire = partie.joueur2 if joueur_actuel == joueur1 else joueur1
 
-    # Gérer la phase de pioche automatiquement
+    # gerer la phase de pioche automatiquement
     if partie.phases[partie.phase_actuelle_index] == "Pioche":
         print("-" * 30)
         print(f"Nouveau tour pour {joueur_actuel.nom} !")
@@ -136,26 +142,28 @@ while True:
             print(f"{joueur_actuel.nom} ne peut plus piocher !")
         partie.prochaine_phase() # Passe à la phase Principale
         continue
+        #passe a la suite / decouvert aleatoirement 
 
     afficher_etat_jeu(partie)
 
-    # Vérification de victoire
+    # verification de victoire
     gagnant = partie.verifier_victoire()
     if gagnant:
         print(f"Victoire ! {gagnant.nom} a gagné la partie !")
         break
+        #va casser la boucle des lors qu'il y a un gagnant
 
     action = demander_action(partie)
 
     if action is None:
-        continue # Action invalide, on redemande
+        continue # action invalide, on redemande
 
     if action == "auto":
         print("Aucune action possible, passage à la phase suivante.")
-        # Si on est en phase de combat, on finit le tour
+        # si on est en phase de combat, on finit le tour
         if partie.phases[partie.phase_actuelle_index] == "Combat":
             partie.changer_tour()
-        # Sinon on passe à la phase de combat
+        # sinon on passe à la phase de combat
         else:
             partie.prochaine_phase()
         continue
@@ -167,12 +175,12 @@ while True:
     
     if action == "fin_tour":
         print(f"Fin du tour de {joueur_actuel.nom}.")
-        partie.changer_tour() # Change de joueur et met la phase à Pioche
+        partie.changer_tour() # change de joueur et met la phase à Pioche
         continue
 
     # --- Exécution des actions de jeu ---
     if action == "invoquer":
-        try:
+        try:     # try = verifie que les reponses des inputs sont valide sinon sa bascule sur le excepte en bas 
             print("--- Votre Main (Monstres) ---")
             for i, carte in enumerate(joueur_actuel.main):
                 if isinstance(carte, CarteMonstre):
@@ -180,12 +188,13 @@ while True:
             
             choix_carte = int(input("Quelle carte de votre main voulez-vous invoquer ? (numéro) > ")) - 1
             choix_pos = int(input("Sur quel emplacement ? (0-4) > "))
+            #defini quel carte monstre et a quelle emplacement on la pose
 
             if 0 <= choix_carte < len(joueur_actuel.main) and isinstance(joueur_actuel.main[choix_carte], CarteMonstre) and 0 <= choix_pos < 5:
                 joueur_id = 1 if joueur_actuel == joueur1 else 2
                 zones_monstres_joueur = partie.plateau.zones_monstre_j1 if joueur_id == 1 else partie.plateau.zones_monstre_j2
                 
-                if zones_monstres_joueur[choix_pos] is None:
+                if zones_monstres_joueur[choix_pos] is None:    #verifie qu'il n'y a pas d'autre carte a cet emplacement
                     carte_a_invoquer = joueur_actuel.main.pop(choix_carte)
                     partie.plateau.placer_carte(joueur_id, carte_a_invoquer, "monstre", choix_pos)
                     print(f"{joueur_actuel.nom} a invoqué {carte_a_invoquer.nom}!")
