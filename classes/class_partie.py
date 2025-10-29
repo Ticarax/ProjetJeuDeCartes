@@ -17,8 +17,6 @@ class Partie:
 
     def prochaine_phase(self):
         self.phase_actuelle_index = (self.phase_actuelle_index + 1) % len(self.phases)
-        if self.phases[self.phase_actuelle_index] == "Pioche":
-            self.changer_tour()
 
     def changer_tour(self):
         if self.joueur_actuel == self.joueur1:
@@ -26,7 +24,6 @@ class Partie:
         else:
             self.joueur_actuel = self.joueur1
         self.phase_actuelle_index = 0 # Reset phase to Pioche for the new player
-        self.joueur_actuel.piocher()
 
     def verifier_victoire(self):
         if self.joueur1.points_de_vie <= 0:
