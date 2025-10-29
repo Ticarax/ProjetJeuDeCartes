@@ -283,8 +283,8 @@ while True:
 
                                 else:
                                     print("Il n'y a pas de monstre à cet emplacement.")
-                        else:
-                            print("Emplacement de cible invalide.")
+                            else:
+                                print("Emplacement de cible invalide.")
                 else:
                     print("Vous n'avez pas de monstre à cet emplacement pour attaquer.")
             else:
