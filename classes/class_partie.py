@@ -19,6 +19,14 @@ class Partie:
         self.phase_actuelle_index = (self.phase_actuelle_index + 1) % len(self.phases)
 
     def changer_tour(self):
+        # Réinitialiser le statut d'attaque de tous les monstres sur le plateau
+        for monstre in self.plateau.zones_monstre_j1:
+            if monstre:
+                monstre.a_attaque_ce_tour = False
+        for monstre in self.plateau.zones_monstre_j2:
+            if monstre:
+                monstre.a_attaque_ce_tour = False
+
         if self.joueur_actuel == self.joueur1:
             self.joueur_actuel = self.joueur2
         else:

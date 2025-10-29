@@ -29,8 +29,9 @@ def demander_action(partie):
         actions_possibles = menu
 
     elif phase_actuelle == "Combat":
-        # On vérifie si le joueur peut attaquer (a un monstre sur le terrain)
-        peut_attaquer = any(z is not None for z in (partie.plateau.zones_monstre_j1 if partie.joueur_actuel == partie.joueur1 else partie.plateau.zones_monstre_j2))
+        # On vérifie si le joueur a un monstre qui peut encore attaquer
+        zones_joueur = partie.plateau.zones_monstre_j1 if partie.joueur_actuel == partie.joueur1 else partie.plateau.zones_monstre_j2
+        peut_attaquer = any(monstre is not None and not monstre.a_attaque_ce_tour for monstre in zones_joueur)
 
         menu = {}
         if peut_attaquer:
@@ -244,39 +245,44 @@ while True:
                 attaquant = zones_joueur[choix_att]
 
                 if attaquant:
-                    zones_adv = partie.plateau.zones_monstre_j2 if joueur_actuel == joueur1 else partie.plateau.zones_monstre_j1
-                    if all(monstre is None for monstre in zones_adv):
-                        print(f"L'adversaire n'a pas de monstres. Vous attaquez directement ses points de vie !")
-                        adversaire.points_de_vie -= attaquant.points_attaque
-                        print(f"{attaquant.nom} inflige {attaquant.points_attaque} points de dégâts à {adversaire.nom}.")
+                    if attaquant.a_attaque_ce_tour:
+                        print("Ce monstre a déjà attaqué ce tour.")
                     else:
-                        print("Quel monstre adverse attaquer ?")
-                        for i, monstre in enumerate(zones_adv):
-                            if monstre:
-                                print(f"  {i}: {monstre.nom}")
+                        zones_adv = partie.plateau.zones_monstre_j2 if joueur_actuel == joueur1 else partie.plateau.zones_monstre_j1
+                        if all(monstre is None for monstre in zones_adv):
+                            print(f"L'adversaire n'a pas de monstres. Vous attaquez directement ses points de vie !")
+                            adversaire.points_de_vie -= attaquant.points_attaque
+                            print(f"{attaquant.nom} inflige {attaquant.points_attaque} points de dégâts à {adversaire.nom}.")
+                            attaquant.a_attaque_ce_tour = True
+                        else:
+                            print("Quel monstre adverse attaquer ?")
+                            for i, monstre in enumerate(zones_adv):
+                                if monstre:
+                                    print(f"  {i}: {monstre.nom}")
 
-                        choix_def = int(input("Cible ? (emplacement 0-4) > "))
-                        if 0 <= choix_def < 5:
-                            defenseur = zones_adv[choix_def]
+                            choix_def = int(input("Cible ? (emplacement 0-4) > "))
+                            if 0 <= choix_def < 5:
+                                defenseur = zones_adv[choix_def]
 
-                            if defenseur:
-                                resultat = joueur_actuel.declarer_attaque(attaquant, defenseur, adversaire)
-                                print(f"Combat ! {attaquant.nom} attaque {defenseur.nom}.")
+                                if defenseur:
+                                    resultat = joueur_actuel.declarer_attaque(attaquant, defenseur, adversaire)
+                                    attaquant.a_attaque_ce_tour = True
+                                    print(f"Combat ! {attaquant.nom} attaque {defenseur.nom}.")
 
-                                if resultat.get("attaquant_detruit"):
-                                    print(f"{attaquant.nom} est détruit.")
-                                    zones_joueur[choix_att] = None
-                                    joueur_actuel.cimetiere.append(attaquant)
-                                if resultat.get("defenseur_detruit"):
-                                    print(f"{defenseur.nom} est détruit.")
-                                    zones_adv[choix_def] = None
-                                    adversaire.cimetiere.append(defenseur)
-                                
-                                if resultat.get('dommages', 0) > 0:
-                                    print(f"Le joueur perdant reçoit {resultat['dommages']} points de dégâts.")
+                                    if resultat.get("attaquant_detruit"):
+                                        print(f"{attaquant.nom} est détruit.")
+                                        zones_joueur[choix_att] = None
+                                        joueur_actuel.cimetiere.append(attaquant)
+                                    if resultat.get("defenseur_detruit"):
+                                        print(f"{defenseur.nom} est détruit.")
+                                        zones_adv[choix_def] = None
+                                        adversaire.cimetiere.append(defenseur)
+                                    
+                                    if resultat.get('dommages', 0) > 0:
+                                        print(f"Le joueur perdant reçoit {resultat['dommages']} points de dégâts.")
 
-                            else:
-                                print("Il n'y a pas de monstre à cet emplacement.")
+                                else:
+                                    print("Il n'y a pas de monstre à cet emplacement.")
                         else:
                             print("Emplacement de cible invalide.")
                 else:

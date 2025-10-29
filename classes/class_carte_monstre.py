@@ -8,6 +8,7 @@ class CarteMonstre(Carte):
         self.niveau = niveau
         self.position = "Attaque"
         self.renforcee = False
+        self.a_attaque_ce_tour = False
 
     def attaquer(self, monstre_cible):
         resultat = {
