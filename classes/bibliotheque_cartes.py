@@ -39,7 +39,7 @@ gobeling_gang = CarteMonstre("gobline gang", "gobelin classic.", 800, 1400, 5)
 
 # --- Magies ---
 # CarteMagie(nom, description, type_effet, valeur)
-# type_effet peut être "degats", "soin", "pioche", "vole", "finish", "renforcement", "régénération", "buff" etc.
+# type_effet peut être "degats", "soin", "pioche", "vole", "finish", "renforcement", "régénération", "buff" etc.....
 # valeur est le montant des dégats/soins/cartes à piocher.
 
 soins_lumiere = CarteMagie("Pluie de Guérison", "Soigne le joueur actif.", "soin", 500)
@@ -59,6 +59,7 @@ friendship = CarteMagie("friendship power", "augmente l'attaque d'une carte.", "
 fiole = CarteMagie("fiole sacré", "soigne une carte.", "régénération", 500)
 fiole2 = CarteMagie("fiole sacré", "soigne une carte.", "régénération", 500)
 #Sepukku = CarteMagie("sepuku", "augmente l'attaque d'une carte'.""baisse la vie de la carte.", "buff", 400)
+# supuku est rester en commentaire car l'idée des carte a double effets na pas aboutie
 fiole_special = CarteMagie("fiole miraculeuse", "part une attaque.", "renforcement", 1)
 fiole_special2 = CarteMagie("fiole miraculeuse", "part une attaque.", "renforcement", 1)
 

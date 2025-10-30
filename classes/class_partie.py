@@ -19,7 +19,7 @@ class Partie:
         self.phase_actuelle_index = (self.phase_actuelle_index + 1) % len(self.phases)
 
     def changer_tour(self):
-        # Réinitialiser le statut d'attaque de tous les monstres sur le plateau
+        # réinitialiser le statut d'attaque de tous les monstres sur le plateau
         for monstre in self.plateau.zones_monstre_j1:
             if monstre:
                 monstre.a_attaque_ce_tour = False
@@ -31,7 +31,7 @@ class Partie:
             self.joueur_actuel = self.joueur2
         else:
             self.joueur_actuel = self.joueur1
-        self.phase_actuelle_index = 0 # Reset phase to Pioche for the new player
+        self.phase_actuelle_index = 0 # reset la phase de pioche du nouveau joueur
 
     def verifier_victoire(self):
         if self.joueur1.points_de_vie <= 0:

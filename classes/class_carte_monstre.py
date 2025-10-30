@@ -6,6 +6,7 @@ class CarteMonstre(Carte):
         self.points_attaque = points_attaque
         self.points_defense = points_defense
         self.niveau = niveau
+        # le niveau n'est pas utiliser mais c'est sympa
         self.position = "Attaque"
         self.renforcee = False
         self.a_attaque_ce_tour = False
@@ -43,5 +44,5 @@ class CarteMonstre(Carte):
             self.position = "Attaque"
 
     def jouer(self, proprietaire):
-        # For now, playing a monster card does nothing special
+        # sa ne fait rien
         pass

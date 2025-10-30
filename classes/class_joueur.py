@@ -15,11 +15,11 @@ class Joueur:
             return None
 
     def invoquer_monstre(self, monstre, plateau):
-        # This is a simplified version
+        # version simplier mais pas utiliser car fait differament dans la main page
         pass
 
     def poser_carte(self, carte, plateau):
-        # This is a simplified version
+        # version simplier mais pas utiliser car fait differament dans la main page
         pass
 
     def declarer_attaque(self, attaquant, defenseur, adversaire):

@@ -10,6 +10,5 @@ class CarteMagie(Carte):
         return {"type": self.type_effet, "valeur": self.valeur, "nom": self.nom}
 
     def jouer(self, proprietaire):
-        # Playing a magic card activates its effect immediately
         return self.activer_effet(None, None)
 
