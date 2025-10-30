@@ -227,7 +227,7 @@ while True:
                     else: # renforcement, régénération, buff
                         print("Quel de vos monstres voulez-vous cibler ?")
                         zones_cibles = partie.plateau.zones_monstre_j1 if joueur_actuel == joueur1 else partie.plateau.zones_monstre_j2
-                    
+                        # on selectionne les monstres a visés  les siens/adverse 
                     for i, monstre in enumerate(zones_cibles):
                         if monstre:
                             print(f"  {i}: {monstre.nom}")
@@ -243,7 +243,7 @@ while True:
                         print("Entrée invalide.")
                         continue
                 
-                # La carte est retirée de la main dans jouer_carte_magie
+                # la carte est retirée de la main dans jouer_carte_magie
                 partie.jouer_carte_magie(carte_a_activer, joueur_actuel, adversaire, carte_cible)
 
             else:
@@ -268,7 +268,7 @@ while True:
                         print("Ce monstre a déjà attaqué ce tour.")
                     else:
                         zones_adv = partie.plateau.zones_monstre_j2 if joueur_actuel == joueur1 else partie.plateau.zones_monstre_j1
-                        if all(monstre is None for monstre in zones_adv):
+                        if all(monstre is None for monstre in zones_adv): # all = pour signifier tout les monstres / dans ce cas la c'est pour indiquer qu'il n'y a pas de monstre sur les emplacements adverse
                             print(f"L'adversaire n'a pas de monstres. Vous attaquez directement ses points de vie !")
                             adversaire.points_de_vie -= attaquant.points_attaque
                             print(f"{attaquant.nom} inflige {attaquant.points_attaque} points de dégâts à {adversaire.nom}.")
@@ -285,7 +285,7 @@ while True:
 
                                 if defenseur:
                                     resultat = joueur_actuel.declarer_attaque(attaquant, defenseur, adversaire)
-                                    attaquant.a_attaque_ce_tour = True
+                                    attaquant.a_attaque_ce_tour = True  # pour eviter qu'il ne puisse réattaquer
                                     print(f"Combat ! {attaquant.nom} attaque {defenseur.nom}.")
 
                                     if resultat.get("attaquant_detruit"):
@@ -296,6 +296,7 @@ while True:
                                         print(f"{defenseur.nom} est détruit.")
                                         zones_adv[choix_def] = None
                                         adversaire.cimetiere.append(defenseur)
+                                        #ajout de la cart au cimetiere en fonction de la carte détruite
                                     
                                     if resultat.get('dommages', 0) > 0:
                                         print(f"Le joueur perdant reçoit {resultat['dommages']} points de dégâts.")
