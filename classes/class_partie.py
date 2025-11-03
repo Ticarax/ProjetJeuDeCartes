@@ -9,6 +9,7 @@ class Partie:
         self.joueur_actuel = joueur1
         self.phases = ["Pioche", "Principale", "Combat"]
         self.phase_actuelle_index = 0
+        self.numero_tour = 1
 
     def demarrer_partie(self):
         for _ in range(5):
@@ -32,6 +33,7 @@ class Partie:
         else:
             self.joueur_actuel = self.joueur1
         self.phase_actuelle_index = 0 # reset la phase de pioche du nouveau joueur
+        self.numero_tour += 1
 
     def verifier_victoire(self):
         if self.joueur1.points_de_vie <= 0:
@@ -39,6 +41,10 @@ class Partie:
         elif self.joueur2.points_de_vie <= 0:
             return self.joueur1
         return None
+
+    def peut_attaquer_ce_tour(self):
+        # Les joueurs ne peuvent pas attaquer pendant leur premier tour (tour 1 pour J1, tour 2 pour J2)
+        return self.numero_tour > 2
 
     def jouer_carte_magie(self, carte_magie, joueur_actif, joueur_adverse, carte_cible=None):
         print(f"{joueur_actif.nom} active l'effet de {carte_magie.nom}!")

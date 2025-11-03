@@ -33,8 +33,6 @@ def demander_action(partie):
 
     elif phase_actuelle == "Combat":
         # On vérifie si le joueur a un monstre qui peut encore attaquer
-        zones_joueur = partie.plateau.zones_monstre_j1 if partie.joueur_actuel == partie.joueur1 else partie.plateau.zones_monstre_j2
-        peut_attaquer = any(monstre is not None and not monstre.a_attaque_ce_tour for monstre in zones_joueur)
         if not partie.peut_attaquer_ce_tour():
             print("Vous ne pouvez pas attaquer durant votre premier tour.")
             peut_attaquer = False

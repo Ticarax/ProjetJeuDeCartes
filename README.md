@@ -82,6 +82,8 @@ Acteur principal : Joueur Actuel.
 
 Préconditions : La partie est en phase de "Combat". Le joueur actuel a au moins un monstre en position d'attaque sur son plateau. Le joueur adverse a au moins un monstre sur son plateau.
 
+Règle additionnelle : Un joueur ne peut pas attaquer durant son tout premier tour de jeu. Les attaques sont possibles à partir du deuxième tour de chaque joueur (soit à partir du 3ème tour de la partie).
+
 Scénario de succès :
 
 Le joueur actuel sélectionne l'un de ses monstres en position d'attaque (monstre_attaquant).
@@ -114,4 +116,3 @@ Demande au joueur ce qu'il veut faire (input()).
 Traduit cette demande en un appel de méthode sur les objets du Modèle (ex: partie.joueur_actuel.invoquer_monstre(...)).
 
 Cette séparation est cruciale : pour passer à une interface graphique, il suffira de remplacer la partie "Vue/Contrôleur" en ligne de commande par une nouvelle interface graphique (avec Pygame ou Tkinter), sans toucher à une seule ligne de code du moteur de jeu.
-
