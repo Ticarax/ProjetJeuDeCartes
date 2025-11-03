@@ -63,10 +63,10 @@ def demander_action(partie):
 def afficher_etat_jeu(partie):
     joueur = partie.joueur_actuel
     adversaire = partie.joueur2 if partie.joueur_actuel == partie.joueur1 else partie.joueur1
-    print("\n" + "="*30)
+    print("\n" + "="*80)
     print(f"Tour de {joueur.nom} | Phase : {partie.phases[partie.phase_actuelle_index]} | PV: {joueur.points_de_vie}")
     print(f"Adversaire : {adversaire.nom} | PV: {adversaire.points_de_vie}")
-    print("="*30)
+    print("="*80)
     
     print("\n--- Votre Main ---")
     for i, carte in enumerate(joueur.main):#enumerate = pour le nombre de carte que le joueur a dans sa main
@@ -82,7 +82,7 @@ def afficher_etat_jeu(partie):
     #aider par ia pour afficher les nom des carte positioner sur le plateau en fonction du joueur qui joue 
     print(f"\n--- Plateau de {adversaire.nom} ---")
     print("  Monstres:", [c.nom if c else 'Vide' for c in (partie.plateau.zones_monstre_j2 if joueur == partie.joueur1 else partie.plateau.zones_monstre_j1)])
-    print("="*30 + "\n")
+    print("="*80 + "\n")
 
 # --- Initialisation du jeu ---
 # création des joueurs
